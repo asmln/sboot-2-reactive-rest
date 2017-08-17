@@ -16,7 +16,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 /**
  * Routing
  */
-@Configuration
+//@Configuration
 public class RoutingConfiguration {
 
     @Bean
