@@ -1,22 +1,25 @@
 package com.sbrw.auth.controllers;
 
-import com.sbrw.auth.data.User;
 import com.sbrw.auth.data.in.AuthReq;
 import com.sbrw.auth.data.in.TokenReq;
-import com.sbrw.auth.data.out.BaseResponse;
-import com.sbrw.auth.data.out.OkResponse;
-import com.sbrw.auth.data.out.TokenResponse;
-import com.sbrw.auth.data.out.UserResponse;
+import com.sbrw.auth.data.out.*;
+import com.sbrw.auth.model.RegistrationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-
-import java.util.UUID;
 
 /**
  * REST controller
  */
 @RestController
 public class AuthController {
+
+    private RegistrationService registrationService;
+
+    @Autowired
+    public AuthController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
 
     @GetMapping("/")
     BaseResponse hello() {
@@ -26,22 +29,30 @@ public class AuthController {
 
     @PostMapping("/register")
     Mono<BaseResponse> register(@RequestBody Mono<AuthReq> authReqPublisher) {
-        return authReqPublisher.map(r ->
-                new TokenResponse(UUID.randomUUID().toString())
+        return authReqPublisher.flatMap(r ->
+                registrationService.registerUser(r.getEmail(), r.getPassword())
+        ).doOnError(
+                throwable -> new ErrorResponse(throwable.getMessage(), "000")
+        ).map(t ->
+                new TokenResponse(t.getToken())
         );
     }
 
     @PostMapping("/confirm")
     Mono<BaseResponse> confirm(@RequestBody Mono<TokenReq> tokenReqPublisher) {
-        return tokenReqPublisher.map(r ->
-                new UserResponse(new User(r.getToken() + "@mail.xxx"))
-        );
+        return tokenReqPublisher.flatMap(r ->
+                registrationService.confirmUser(r.getToken())
+        ).doOnError(
+                throwable -> new ErrorResponse(throwable.getMessage(), "000")
+        ).map(UserResponse::new);
     }
 
     @PostMapping("/login")
     Mono<BaseResponse> login(@RequestBody Mono<AuthReq> authReqPublisher) {
-        return authReqPublisher.map(r ->
-                new UserResponse(new User(r.getEmail()))
-        );
+        return authReqPublisher.flatMap(r ->
+                registrationService.loginUser(r.getEmail(), r.getPassword())
+        ).doOnError(
+                throwable -> new ErrorResponse(throwable.getMessage(), "000")
+        ).map(UserResponse::new);
     }
 }
