@@ -6,7 +6,7 @@ mvnw test<br />
 Run:<br />
 mvnw spring-boot:run<br />
 
-порт: 9090 можно изменить в application.properties или параметром -Dserver.port={port}<br />
+порт: 9090, можно изменить в application.properties или параметром -Dserver.port={port}<br />
 
 maven, spring-boot-starter-webflux, netty, spring-boot-starter-test, reactor-test<br />
 <br />
