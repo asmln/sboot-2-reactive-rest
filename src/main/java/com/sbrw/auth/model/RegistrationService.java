@@ -1,7 +1,7 @@
 package com.sbrw.auth.model;
 
-import com.sbrw.auth.data.Token;
-import com.sbrw.auth.data.User;
+import com.sbrw.auth.model.data.Token;
+import com.sbrw.auth.model.data.User;
 import reactor.core.publisher.Mono;
 
 /**

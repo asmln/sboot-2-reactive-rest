@@ -1,16 +1,21 @@
 package com.sbrw.auth.controllers;
 
-import com.sbrw.auth.data.in.AuthReq;
-import com.sbrw.auth.data.in.TokenReq;
-import com.sbrw.auth.data.out.*;
+import com.sbrw.auth.model.data.in.AuthRequest;
+import com.sbrw.auth.model.data.in.TokenRequest;
+import com.sbrw.auth.model.data.out.BaseResponse;
+import com.sbrw.auth.model.data.out.OkResponse;
+import com.sbrw.auth.model.data.out.TokenResponse;
+import com.sbrw.auth.model.data.out.UserResponse;
 import com.sbrw.auth.model.RegistrationService;
-import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
- * REST controller
+ * API
  */
 @RestController
 public class AuthController {
@@ -33,22 +38,22 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    Mono<BaseResponse> register(@RequestBody AuthReq authReq) {
-        return registrationService.registerUser(authReq.getEmail(), authReq.getPassword())
+    Mono<BaseResponse> register(@RequestBody AuthRequest authRequest) {
+        return registrationService.registerUser(authRequest.getEmail(), authRequest.getPassword())
                 .map(t ->
                         new TokenResponse(t.getToken())
                 );
     }
 
     @PostMapping("/confirm")
-    Mono<BaseResponse> confirm(@RequestBody TokenReq tokenReq) {
-        return registrationService.confirmUser(tokenReq.getToken())
+    Mono<BaseResponse> confirm(@RequestBody TokenRequest tokenRequest) {
+        return registrationService.confirmUser(tokenRequest.getToken())
                 .map(UserResponse::new);
     }
 
     @PostMapping("/login")
-    Mono<BaseResponse> login(@RequestBody AuthReq authReq) {
-        return registrationService.loginUser(authReq.getEmail(), authReq.getPassword())
+    Mono<BaseResponse> login(@RequestBody AuthRequest authRequest) {
+        return registrationService.loginUser(authRequest.getEmail(), authRequest.getPassword())
                 .map(UserResponse::new);
     }
 }

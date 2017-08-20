@@ -1,9 +1,9 @@
 package com.sbrw.auth.model.exceptions;
 
 /**
- * Created by Anatoly Samoylenko on 18.08.2017.
+ * Exceptions base class
  */
-public class AuthException extends Exception {
+public abstract class AuthException extends Exception {
 
     private String code;
 

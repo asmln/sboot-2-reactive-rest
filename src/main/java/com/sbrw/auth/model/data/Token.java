@@ -1,4 +1,4 @@
-package com.sbrw.auth.data;
+package com.sbrw.auth.model.data;
 
 /**
  * Token

@@ -1,7 +1,7 @@
-package com.sbrw.auth.data.out;
+package com.sbrw.auth.model.data.out;
 
 /**
- * Created by Anatoly Samoylenko on 17.08.2017.
+ * Error response
  */
 public class ErrorResponse extends BaseResponse {
 

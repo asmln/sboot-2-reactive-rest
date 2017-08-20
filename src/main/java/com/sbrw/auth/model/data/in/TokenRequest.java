@@ -1,9 +1,9 @@
-package com.sbrw.auth.data.in;
+package com.sbrw.auth.model.data.in;
 
 /**
- * Token
+ * Token request
  */
-public class TokenReq {
+public class TokenRequest {
 
     private String token;
 

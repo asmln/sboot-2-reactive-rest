@@ -1,4 +1,4 @@
-package com.sbrw.auth.data;
+package com.sbrw.auth.model.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,17 +9,17 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class User {
 
-    static final AtomicLong NEXT_ID = new AtomicLong(0);
+    static private final AtomicLong NEXT_ID = new AtomicLong(0);
 
     private Long id = NEXT_ID.getAndIncrement();
     private String email;
     @JsonIgnore
-    private String passwordHash;
+    private String password;
     private long created = System.currentTimeMillis() / 1000L;
 
-    public User(String email, String passwordHash) {
+    public User(String email, String password) {
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
     }
 
     public Long getId() {
@@ -34,7 +34,7 @@ public class User {
         return created;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 }

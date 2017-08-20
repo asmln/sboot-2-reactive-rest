@@ -1,9 +1,9 @@
-package com.sbrw.auth.data.in;
+package com.sbrw.auth.model.data.in;
 
 /**
- * Auth
+ * Auth request
  */
-public class AuthReq {
+public class AuthRequest {
 
     private String email;
     private String password;

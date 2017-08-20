@@ -1,9 +1,9 @@
-package com.sbrw.auth.data;
+package com.sbrw.auth.model.data;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Authority
+ * Authority. User with token and confirmed
  */
 public class Authority {
 

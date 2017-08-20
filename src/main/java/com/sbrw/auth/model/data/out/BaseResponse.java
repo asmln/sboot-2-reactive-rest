@@ -1,4 +1,4 @@
-package com.sbrw.auth.data.out;
+package com.sbrw.auth.model.data.out;
 
 /**
  * Base class for response

@@ -1,6 +1,6 @@
 package com.sbrw.auth.controllers;
 
-import com.sbrw.auth.data.out.ErrorResponse;
+import com.sbrw.auth.model.data.out.ErrorResponse;
 import com.sbrw.auth.model.exceptions.AuthException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import reactor.core.publisher.Mono;
 
 /**
- * Created by Anatoly Samoylenko on 18.08.2017.
+ * Exception handler
  */
 @ControllerAdvice
 @ResponseBody
