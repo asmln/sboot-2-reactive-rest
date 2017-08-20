@@ -4,6 +4,7 @@ import com.sbrw.auth.data.in.AuthReq;
 import com.sbrw.auth.data.in.TokenReq;
 import com.sbrw.auth.data.out.*;
 import com.sbrw.auth.model.RegistrationService;
+import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -21,38 +22,33 @@ public class AuthController {
         this.registrationService = registrationService;
     }
 
-    @GetMapping("/")
-    BaseResponse hello() {
+    @GetMapping("/usual")
+    BaseResponse helloUsual() {
         return new OkResponse("hello");
     }
 
+    @GetMapping("/reactive")
+    Mono<BaseResponse> helloReactive() {
+        return Mono.just(new OkResponse("hello"));
+    }
 
     @PostMapping("/register")
-    Mono<BaseResponse> register(@RequestBody Mono<AuthReq> authReqPublisher) {
-        return authReqPublisher.flatMap(r ->
-                registrationService.registerUser(r.getEmail(), r.getPassword())
-        ).doOnError(
-                throwable -> new ErrorResponse(throwable.getMessage(), "000")
-        ).map(t ->
-                new TokenResponse(t.getToken())
-        );
+    Mono<BaseResponse> register(@RequestBody AuthReq authReq) {
+        return registrationService.registerUser(authReq.getEmail(), authReq.getPassword())
+                .map(t ->
+                        new TokenResponse(t.getToken())
+                );
     }
 
     @PostMapping("/confirm")
-    Mono<BaseResponse> confirm(@RequestBody Mono<TokenReq> tokenReqPublisher) {
-        return tokenReqPublisher.flatMap(r ->
-                registrationService.confirmUser(r.getToken())
-        ).doOnError(
-                throwable -> new ErrorResponse(throwable.getMessage(), "000")
-        ).map(UserResponse::new);
+    Mono<BaseResponse> confirm(@RequestBody TokenReq tokenReq) {
+        return registrationService.confirmUser(tokenReq.getToken())
+                .map(UserResponse::new);
     }
 
     @PostMapping("/login")
-    Mono<BaseResponse> login(@RequestBody Mono<AuthReq> authReqPublisher) {
-        return authReqPublisher.flatMap(r ->
-                registrationService.loginUser(r.getEmail(), r.getPassword())
-        ).doOnError(
-                throwable -> new ErrorResponse(throwable.getMessage(), "000")
-        ).map(UserResponse::new);
+    Mono<BaseResponse> login(@RequestBody AuthReq authReq) {
+        return registrationService.loginUser(authReq.getEmail(), authReq.getPassword())
+                .map(UserResponse::new);
     }
 }

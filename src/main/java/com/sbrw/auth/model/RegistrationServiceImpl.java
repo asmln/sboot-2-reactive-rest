@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
@@ -18,18 +21,15 @@ import java.util.UUID;
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
-    private boolean registerImmediately = false;
     private AuthRepository authRepository;
 
     @Autowired
-    public RegistrationServiceImpl(AuthRepository authRepository, @Value("${app.register.immediately}") boolean registerImmediately) {
-        this.registerImmediately = registerImmediately;
+    public RegistrationServiceImpl(AuthRepository authRepository) {
         this.authRepository = authRepository;
     }
 
     @Override
     public Mono<Token> registerUser(String email, String password) {
-        //TODO добавить хэширование пароля
         return authRepository.saveUser(
                 Mono.just(new User(email, password))
         ).flatMap(user -> {
@@ -50,10 +50,11 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public Mono<User> loginUser(String email, String password) {
         return authRepository.findAuthorityByEmail(email).filter(auth ->
-                auth.getUser().getPasswordHash().equals(password) && (registerImmediately || auth.isConfirmed())
+                auth.getUser().getPasswordHash().equals(password)
         ).map(Authority::getUser)
                 .switchIfEmpty(
                         Mono.error(new UserNotFoundException())
                 );
     }
+
 }

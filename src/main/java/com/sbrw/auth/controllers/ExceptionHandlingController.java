@@ -2,6 +2,7 @@ package com.sbrw.auth.controllers;
 
 import com.sbrw.auth.data.out.ErrorResponse;
 import com.sbrw.auth.model.exceptions.AuthException;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
  */
 @ControllerAdvice
 @ResponseBody
+@Controller
 public class ExceptionHandlingController {
 
     static private final String DEFAULT_MESSAGE = "Unknown error";
@@ -25,7 +27,7 @@ public class ExceptionHandlingController {
     }
 
     @ExceptionHandler(Exception.class)
-    Mono<ErrorResponse> authException() {
+    Mono<ErrorResponse> authException(Exception e) {
         return Mono.just(
                 new ErrorResponse(DEFAULT_MESSAGE, DEFAULT_CODE)
         );
