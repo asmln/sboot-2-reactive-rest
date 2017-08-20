@@ -62,6 +62,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                 Mono.error(new UserNotFoundException())
         ).filter(auth ->
                 auth.getUser().getPassword().equals(password)
+        ).switchIfEmpty(
+                Mono.error(new UserNotFoundException())
         ).map(
                 Authority::getUser
         );
