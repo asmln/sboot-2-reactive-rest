@@ -11,36 +11,45 @@ MockMvc не подружился с reactive (см test/java/com/sbrw/aut/AuthA
 <br />
 # API:<br />
 
-POST /register<br />
+<b>POST /register</b><br />
 
 in:<br />
+```
 {
   email: "уникальный идентификатор пользователя",
   password: "пароль"
-}<br />
+}
+```
 
 out ok:<br />
+```
 {
   success: true,
   message: "",
   token: "токен подтверждения, уникальная случайная строка"
-}<br />
+}
+```
 
 out error:<br />
+```
 {
   success: false,
   message: "описание ошибки",
   error: "error_code"
-}<br />
+}
+```
 
-POST /confirm<br />
+<b>POST /confirm</b><br />
 
 in:
+```
 {
   token: "confirmation token"
-}<br />
+}
+```
 
 out ок:
+```
 {
   success: true,
   message: "",
@@ -49,24 +58,30 @@ out ок:
     email: "уникальный идентификатор пользователя",
     created: unix timestamp (msec)
   }
-}<br />
+}
+```
 
 out error:
+```
 {
   success: false,
   message: "описание ошибки",
   error: "error_code"
-}<br />
+}
+```
 
-POST /login<br />
+<b>POST /login</b><br />
 
 in:
+```
 {
   email: "уникальный идентификатор пользователя",
   password: "пароль"
-}<br />
+}
+```
 
 out ok:
+```
 {
   success: true,
   message: "",
@@ -75,11 +90,14 @@ out ok:
     email: "уникальный идентификатор пользователя",
     created: unix timestamp (msec)
   }
-}<br />
+}
+```
 
 out error:
+```
 {
   success: false,
   message: "описание ошибки",
   error: "error_code"
-}<br />
+}
+```
