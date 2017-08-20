@@ -26,6 +26,7 @@ public class RegistrationServiceImplWTCUnitTests {
 
     private String email = "test@mail.com";
     private String password= "qwerty";
+    private String wrongPassword= "wrongpassword";
 
     private String tokenString = "token_string";
 
@@ -119,6 +120,30 @@ public class RegistrationServiceImplWTCUnitTests {
             StepVerifier.create(
                     registrationService.confirmUser(t.getToken())
             ).expectNext(user).verifyComplete()
+        ).verifyComplete();
+    }
+
+    @Test
+    public void testWrongPassword() throws Exception {
+        User user = new User(email, password);
+        Token token = new Token(tokenString);
+        Authority authority = new Authority(user, false);
+        when(authRepository.saveUser(any())).thenReturn(Mono.just(user));
+        when(authRepository.saveToken(any(), any())).thenReturn(Mono.just(token));
+        when(authRepository.extractEmailByToken(any())).thenReturn(Mono.just(email));
+        when(authRepository.findAuthorityByEmail(email)).thenReturn(Mono.just(authority));
+        when(authRepository.confirm(any())).thenReturn(Mono.just(new Authority(user, true)));
+
+        StepVerifier.create(
+                registrationService.registerUser(email, password)
+        ).consumeNextWith(t ->
+                StepVerifier.create(
+                        registrationService.confirmUser(t.getToken())
+                ).consumeNextWith(u ->
+                        StepVerifier.create(
+                                registrationService.loginUser(email, wrongPassword)
+                        ).expectError(UserNotFoundException.class).verify()
+                ).verifyComplete()
         ).verifyComplete();
     }
 
