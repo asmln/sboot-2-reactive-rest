@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 /**
  * API
  */
@@ -38,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    Mono<BaseResponse> register(@RequestBody AuthRequest authRequest) {
+    Mono<BaseResponse> register(@Valid @RequestBody AuthRequest authRequest) {
         return registrationService.registerUser(authRequest.getEmail(), authRequest.getPassword())
                 .map(t ->
                         new TokenResponse(t.getToken())
@@ -46,13 +48,13 @@ public class AuthController {
     }
 
     @PostMapping("/confirm")
-    Mono<BaseResponse> confirm(@RequestBody TokenRequest tokenRequest) {
+    Mono<BaseResponse> confirm(@Valid @RequestBody TokenRequest tokenRequest) {
         return registrationService.confirmUser(tokenRequest.getToken())
                 .map(UserResponse::new);
     }
 
     @PostMapping("/login")
-    Mono<BaseResponse> login(@RequestBody AuthRequest authRequest) {
+    Mono<BaseResponse> login(@Valid @RequestBody AuthRequest authRequest) {
         return registrationService.loginUser(authRequest.getEmail(), authRequest.getPassword())
                 .map(UserResponse::new);
     }
