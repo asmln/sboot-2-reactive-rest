@@ -147,6 +147,36 @@ public class AuthApplicationWTCIntegrationTests {
 		assertEquals(userConfirmJson, userLoginJson);
 	}
 
+    @Test
+    public void test_Register_Register_FirstTokenNotFound_SecondOk() throws Exception {
+        AuthRequest req = new AuthRequest();
+        req.setEmail("testRegisterRegister@mail.com");
+        req.setPassword("123456");
+
+        EntityExchangeResult<byte[]> registerResult1 = register(req).returnResult();
+        String tokenJson1 = new String(registerResult1.getResponseBody(), "UTF-8");
+        String token1 = parser.parseMap(tokenJson1).get("token").toString();
+        TokenRequest tokenRequest1 = new TokenRequest();
+        tokenRequest1.setToken(token1);
+
+        EntityExchangeResult<byte[]> registerResult2 = register(req).returnResult();
+        String tokenJson2 = new String(registerResult2.getResponseBody(), "UTF-8");
+        String token2 = parser.parseMap(tokenJson2).get("token").toString();
+        TokenRequest tokenRequest2 = new TokenRequest();
+        tokenRequest2.setToken(token2);
+
+        confirm(tokenRequest1).jsonPath("$.success").isEqualTo(false)
+                .jsonPath("$.message").isEqualTo("Token not found")
+                .jsonPath("$.error").isEqualTo("TNF");
+
+        confirm(tokenRequest2)
+                .jsonPath("$.success").isEqualTo(true)
+                .jsonPath("$.user").exists()
+                .jsonPath("$.user.email").isEqualTo(req.getEmail())
+                .jsonPath("$.user.id").isNumber()
+                .jsonPath("$.user.created").isNumber();
+    }
+
 	private WebTestClient.BodyContentSpec login(AuthRequest authRequest) {
 		return webTestClient.post().uri("/login")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
