@@ -13,6 +13,10 @@ maven, spring-boot-starter-webflux, netty, spring-boot-starter-test, reactor-tes
 MockMvc не подружился с reactive (см test/java/com/sbrw/aut/AuthApplicationMMIntegrationTests.java)
 или просто я не знаю как это сделать.<br />
 <br />
+Пример обращения к API:
+```
+curl -H "Content-Type: application/json" -X POST -d '{"email":"test@email.com","password":"123"}' http://{local_ip}:9090/register
+```
 # API:<br />
 
 <b>POST /register</b><br />
