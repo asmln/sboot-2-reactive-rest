@@ -15,7 +15,7 @@ public class User {
     private String email;
     @JsonIgnore
     private String password;
-    private long created = System.currentTimeMillis() / 1000L;
+    private long created = System.currentTimeMillis();
 
     public User(String email, String password) {
         this.email = email;
