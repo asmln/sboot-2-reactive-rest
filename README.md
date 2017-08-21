@@ -12,7 +12,7 @@ maven, spring-boot-starter-webflux, netty, spring-boot-starter-test, reactor-tes
 <br />
 MockMvc не подружился с reactive (см test/java/com/sbrw/aut/AuthApplicationMMIntegrationTests.java)
 или просто я не понял как это сделать.<br />
-Использовал для тестов WebTestClient, mockito. 
+Использовал для тестов WebTestClient, mockito.<br />
 <br />
 Пример обращения к API:
 ```
