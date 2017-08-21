@@ -11,7 +11,8 @@ mvnw spring-boot:run<br />
 maven, spring-boot-starter-webflux, netty, spring-boot-starter-test, reactor-test<br />
 <br />
 MockMvc не подружился с reactive (см test/java/com/sbrw/aut/AuthApplicationMMIntegrationTests.java)
-или просто я не знаю как это сделать.<br />
+или просто я не понял как это сделать.<br />
+Использовал для тестов WebTestClient, mockito. 
 <br />
 Пример обращения к API:
 ```
